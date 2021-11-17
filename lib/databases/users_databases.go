@@ -13,10 +13,11 @@ type get_user struct {
 }
 
 func GetUser(id int) (interface{}, error) {
-	if err := config.DB.Find(&user, id).Error; err != nil {
+	err := config.DB.Find(&user, id).Error
+	rowsAffected := config.DB.Find(&user, id).RowsAffected
+	if err != nil || rowsAffected < 1 {
 		return nil, err
 	}
-
 	return get_user{user.Nama, user.Email}, nil
 }
 
