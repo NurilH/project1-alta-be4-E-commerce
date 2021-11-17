@@ -14,7 +14,7 @@ func GetUserControllers(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
+			"message": "False Param",
 		})
 	}
 	user, e := databases.GetUser(convId)
@@ -31,14 +31,14 @@ func GetUserControllers(c echo.Context) error {
 	})
 }
 
-func CreateUserController(c echo.Context) error {
+// func CreateUserController(c echo.Context) error {
 
-}
+// }
 
-func DeleteUserController(c echo.Context) error {
+// func DeleteUserController(c echo.Context) error {
 
-}
+// }
 
-func UpdateUserController(c echo.Context) error {
+// func UpdateUserController(c echo.Context) error {
 
-}
+// }
