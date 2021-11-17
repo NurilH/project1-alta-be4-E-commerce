@@ -11,14 +11,14 @@ import (
 
 func GetUserControllers(c echo.Context) error {
 	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
+	conv_id, err := strconv.Atoi(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "False Param",
 		})
 	}
-	user, e := databases.GetUser(convId)
+	user, e := databases.GetUser(conv_id)
 	if e != nil || user == nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
@@ -48,9 +48,28 @@ func CreateUserControllers(c echo.Context) error {
 	})
 }
 
-// func DeleteUserControllers(c echo.Context) error {
+func DeleteUserControllers(c echo.Context) error {
+	id := c.Param("id")
+	conv_id, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
 
-// }
+	_, e := databases.DeleteUser(conv_id)
+	if e != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+	})
+}
 
 func UpdateUserControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
