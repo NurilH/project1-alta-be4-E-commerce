@@ -1,17 +1,28 @@
 package routes
 
 import (
+	"project_altabe4_1/constants"
 	"project_altabe4_1/controllers"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func New() *echo.Echo {
 
 	e := echo.New()
-	e.GET("/users/:id", controllers.GetUserControllers)
+	// e.GET("/users/:id", controllers.GetUserControllers)
 	e.POST("/users", controllers.CreateUserControllers)
-	e.PUT("/users/:id", controllers.UpdateUserControllers)
-	e.DELETE("/users/:id", controllers.DeleteUserControllers)
+	// e.PUT("/users/:id", controllers.UpdateUserControllers)
+	// e.DELETE("/users/:id", controllers.DeleteUserControllers)
+	e.POST("/login", controllers.LoginUserControllers)
+
+	// group JWT
+	j := e.Group("/jwt")
+	j.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
+
+	j.GET("/users/:id", controllers.GetUserControllers)
+	j.PUT("/users/:id", controllers.UpdateUserControllers)
+	j.DELETE("/users/:id", controllers.DeleteUserControllers)
 	return e
 }
