@@ -7,17 +7,17 @@ import (
 
 var user models.Users
 
-var SelectUser = []string{
-	user.Nama,
-	user.Email,
+type get_user struct {
+	Nama  string
+	Email string
 }
 
 func GetUser(id int) (interface{}, error) {
-	if err := config.DB.Select(&SelectUser).First(&user, id).Error; err != nil {
+	if err := config.DB.Find(&user, id).Error; err != nil {
 		return nil, err
 	}
 
-	return SelectUser, nil
+	return get_user{user.Nama, user.Email}, nil
 }
 
 func CreateUser(user models.Users) (interface{}, error) {
@@ -35,7 +35,7 @@ func DeleteUser(id int) (interface{}, error) {
 	return user, nil
 }
 
-func UpdateUser(id int, user models.Users) (interface{}, error) {
+func UpdateUser(id int, user *models.Users) (interface{}, error) {
 	if err := config.DB.Where("id = ?", id).Updates(&user).Error; err != nil {
 		return nil, err
 	}

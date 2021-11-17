@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"project_altabe4_1/lib/databases"
+	"project_altabe4_1/models"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -14,7 +15,7 @@ func GetUserControllers(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
+			"message": "False Param",
 		})
 	}
 	user, e := databases.GetUser(convId)
@@ -49,7 +50,10 @@ func UpdateUserController(c echo.Context) error {
 		})
 
 	}
-	user, e := databases.GetUser(id)
+	users := models.Users{}
+	c.Bind(&users)
+
+	result, e := databases.UpdateUser(id, &users)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    400,
@@ -58,9 +62,9 @@ func UpdateUserController(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    200,
-		"message": "succes",
-		"user":    user,
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"user":    result,
 	})
 
 }
