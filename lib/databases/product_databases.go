@@ -21,4 +21,9 @@ func CreateProduct(product *models.Product) (interface{}, error) {
 	return product, nil
 }
 
-
+func UpdateProduct(id int, products *models.Product) (interface{}, error) {
+	if err := config.DB.Where("id = ?", id).Updates(&products).Error; err != nil {
+		return nil, err
+	}
+	return products, nil
+}

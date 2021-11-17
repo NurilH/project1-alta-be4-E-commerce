@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/models"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,6 +29,29 @@ func CreateProductControllers(c echo.Context) error {
 	c.Bind(&Product)
 	_, e := databases.CreateProduct(&Product)
 	if e != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+	})
+}
+
+func UpdateProductControllers(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
+	product := models.Product{}
+	c.Bind(&product)
+	_, err = databases.UpdateProduct(id, &product)
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Bad Request",

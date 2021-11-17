@@ -18,6 +18,7 @@ func New() *echo.Echo {
 	e.POST("/login", controllers.LoginUserControllers)
 
 	e.GET("/products", controllers.GetProductsController)
+	e.PUT("/products/:id", controllers.UpdateProductControllers)
 
 	// group JWT
 	j := e.Group("/jwt")
