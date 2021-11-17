@@ -20,3 +20,15 @@ func GetProductById(id int) (interface{}, error) {
 	}
 	return get_product{product.ID, product.Nama, product.Harga, product.Deskripsi}, nil
 }
+
+func DeleteProduct(id int) (interface{}, error) {
+	var product models.Product
+	check_product := config.DB.Find(&product, id).RowsAffected
+	err := config.DB.Delete(&product).Error
+	// rows_affected := config.DB.Delete(&product).RowsAffected
+	// log.Println("rows affected", rows_affected)
+	if err != nil || check_product > 0 {
+		return nil, err
+	}
+	return product, nil
+}
