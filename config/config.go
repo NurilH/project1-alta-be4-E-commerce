@@ -3,6 +3,8 @@ package config
 import (
 	"os"
 
+	"project_altabe4_1/models"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -22,5 +24,5 @@ func InitDB() {
 }
 
 func InitMigrate() {
-
+	DB.AutoMigrate(&models.Users{})
 }
