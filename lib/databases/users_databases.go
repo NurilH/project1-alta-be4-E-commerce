@@ -35,7 +35,7 @@ func DeleteUser(id int) (interface{}, error) {
 	return user, nil
 }
 
-func UpdateUser(id int, user models.Users) (interface{}, error) {
+func UpdateUser(id int, user *models.Users) (interface{}, error) {
 	if err := config.DB.Where("id = ?", id).Updates(&user).Error; err != nil {
 		return nil, err
 	}

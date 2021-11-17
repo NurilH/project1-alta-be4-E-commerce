@@ -52,6 +52,29 @@ func CreateUserControllers(c echo.Context) error {
 
 // }
 
-// func UpdateUserControllers(c echo.Context) error {
+func UpdateUserControllers(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
 
-// }
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+
+	}
+	users := models.Users{}
+	c.Bind(&users)
+
+	_, e := databases.UpdateUser(id, &users)
+	if e != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+	})
+}
