@@ -10,5 +10,6 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.GET("/users/:id", controllers.GetUserControllers)
+	e.POST("/users", controllers.CreateUserControllers)
 	return e
 }

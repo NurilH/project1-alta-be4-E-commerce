@@ -20,8 +20,8 @@ func GetUser(id int) (interface{}, error) {
 	return get_user{user.Nama, user.Email}, nil
 }
 
-func CreateUser(user models.Users) (interface{}, error) {
-	if err := config.DB.Save(&user).Error; err != nil {
+func CreateUser(user *models.Users) (interface{}, error) {
+	if err := config.DB.Create(&user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
