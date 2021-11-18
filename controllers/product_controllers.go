@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"project_altabe4_1/lib/databases"
+	"project_altabe4_1/middlewares"
 	"project_altabe4_1/models"
 	"strconv"
 
@@ -27,6 +28,8 @@ func GetProductsController(c echo.Context) error {
 func CreateProductControllers(c echo.Context) error {
 	Product := models.Product{}
 	c.Bind(&Product)
+	logged := middlewares.ExtractTokenId(c)
+	Product.UsersID = uint(logged)
 	_, e := databases.CreateProduct(&Product)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -34,6 +37,7 @@ func CreateProductControllers(c echo.Context) error {
 			"message": "Bad Request",
 		})
 	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
@@ -48,6 +52,15 @@ func UpdateProductControllers(c echo.Context) error {
 			"message": "False Param",
 		})
 	}
+
+	logged := middlewares.ExtractTokenId(c)
+	if logged != id {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
+	}
+
 	product := models.Product{}
 	c.Bind(&product)
 	_, err = databases.UpdateProduct(id, &product)
