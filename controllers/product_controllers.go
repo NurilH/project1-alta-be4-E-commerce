@@ -84,14 +84,35 @@ func DeleteProductControllers(c echo.Context) error {
 			"message": "Access Forbidden",
 		})
 	}
-	_, e := databases.DeleteProduct(conv_id)
+	databases.DeleteProduct(conv_id)
 
-	if e != nil {
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+	})
+}
+
+func UpdateProductControllers(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
+			"message": "False Param",
 		})
 	}
+	id_user_product, _ := databases.GetIDUserProduct(id)
+	logged := middlewares.ExtractTokenId(c)
+
+	if logged != int(id_user_product) {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
+	}
+
+	product := models.Product{}
+	c.Bind(&product)
+	databases.UpdateProduct(id, &product)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",

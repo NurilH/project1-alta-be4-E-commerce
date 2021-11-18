@@ -28,13 +28,11 @@ func New() *echo.Echo {
 	j.PUT("/users/:id", controllers.UpdateUserControllers)
 	j.DELETE("/users/:id", controllers.DeleteUserControllers)
 
+	//product
 	j.GET("/products/:id", controllers.GetProductByIdControllers)
 	j.DELETE("/products/:id", controllers.DeleteProductControllers)
-
-	//product
-
 	j.POST("/product", controllers.CreateProductControllers)
-
 	j.GET("/products", controllers.GetProductsController)
+	j.PUT("/products/:id", controllers.UpdateProductControllers)
 	return e
 }

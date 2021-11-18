@@ -51,10 +51,15 @@ func DeleteProduct(id int) (interface{}, error) {
 	check_product := config.DB.Find(&product, id).RowsAffected
 
 	err := config.DB.Delete(&product).Error
-	// rows_affected := config.DB.Delete(&product).RowsAffected
-	// log.Println("rows affected", rows_affected)
 	if err != nil || check_product > 0 {
 		return nil, err
 	}
 	return product.UsersID, nil
+}
+
+func UpdateProduct(id int, products *models.Product) (interface{}, error) {
+	if err := config.DB.Where("id = ?", id).Updates(&products).Error; err != nil {
+		return nil, err
+	}
+	return products, nil
 }
