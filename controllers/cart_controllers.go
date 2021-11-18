@@ -6,6 +6,7 @@ import (
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/middlewares"
 	"project_altabe4_1/models"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -49,5 +50,31 @@ func GetAllCartControllers(c echo.Context) error {
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
 		"data":    cart,
+	})
+}
+
+func DeleteCartControllers(c echo.Context) error {
+	id := c.Param("id")
+	conv_id, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
+	id_user_cart, _ := databases.GetIDUserCart(conv_id)
+	log.Println("id_user_cart", id_user_cart)
+	logged := middlewares.ExtractTokenId(c)
+	log.Println("idlogged", logged)
+	if uint(logged) != id_user_cart {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
+	}
+	databases.DeleteCart(conv_id)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
 	})
 }
