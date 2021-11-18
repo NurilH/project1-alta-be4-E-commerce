@@ -8,5 +8,6 @@ type Product struct {
 	Harga     int    `json:"harga" form:"harga"`
 	Kategori  string `json:"kategori" form:"kategori"`
 	Deskripsi string `json:"deskripsi" form:"deskripsi"`
-	UsersID   uint   `json:"usersid" form:"usersid"`
+	UsersID   uint
+	Cart      []Cart
 }

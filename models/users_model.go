@@ -9,4 +9,5 @@ type Users struct {
 	Password string `json:"password" form:"password"`
 	Token    string `json:"token" form:"token"`
 	Product  []Product
+	Cart     []Cart
 }

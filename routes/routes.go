@@ -31,8 +31,8 @@ func New() *echo.Echo {
 	//product
 	j.GET("/products/:id", controllers.GetProductByIdControllers)
 	j.DELETE("/products/:id", controllers.DeleteProductControllers)
-	j.POST("/product", controllers.CreateProductControllers)
-	j.GET("/products", controllers.GetProductsController)
+	j.POST("/products", controllers.CreateProductControllers)
+	j.GET("/products", controllers.GetProductsControllers)
 	j.PUT("/products/:id", controllers.UpdateProductControllers)
 	return e
 }
