@@ -28,10 +28,26 @@ func GetAllCart() (interface{}, error) {
 }
 
 func CreateCart(Cart *models.Cart) (interface{}, error) {
+
 	if err := config.DB.Create(&Cart).Error; err != nil {
 		return nil, err
 	}
+
 	return Cart.UsersID, nil
+}
+
+func GetHargaProduct(id int) (int, error) {
+	product := models.Product{}
+	err := config.DB.Find(&product, id)
+	if err.Error != nil {
+		return 0, err.Error
+	}
+	log.Println("harga", product.Harga)
+	return product.Harga, nil
+}
+
+func UpdateCart(id int, Cart *models.Cart) {
+	config.DB.Where("id = ?", id).Updates(&Cart)
 }
 
 func DeleteCart(id int) (interface{}, error) {
@@ -44,11 +60,11 @@ func DeleteCart(id int) (interface{}, error) {
 	return cart.UsersID, nil
 }
 
-func GetIDUserCart(id int) (uint, error) {
+func GetIDUserCart(id int) (uint, uint, error) {
 	var cart models.Cart
 	err := config.DB.Find(&cart, id)
 	if err.Error != nil {
-		return 0, err.Error
+		return 0, 0, err.Error
 	}
-	return cart.UsersID, nil
+	return cart.UsersID, cart.ProductID, nil
 }
