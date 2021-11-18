@@ -38,7 +38,46 @@ func CreateCartControllers(c echo.Context) error {
 			"message": "Bad Request",
 		})
 	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation"})
+}
 
+func GetAllCartControllers(c echo.Context) error {
+	cart, err := databases.GetAllCart()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"data":    cart,
+	})
+}
+
+func DeleteCartControllers(c echo.Context) error {
+	id := c.Param("id")
+	conv_id, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
+	id_user_cart, _, _ := databases.GetIDUserCart(conv_id)
+	log.Println("id_user_cart", id_user_cart)
+	logged := middlewares.ExtractTokenId(c)
+	log.Println("idlogged", logged)
+	if uint(logged) != id_user_cart {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
+	}
+	databases.DeleteCart(conv_id)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
@@ -56,16 +95,30 @@ func UpdateCartControllers(c echo.Context) error {
 
 	cart := models.Cart{}
 	c.Bind(&cart)
-	// logged := middlewares.ExtractTokenId(c)
-	// cart.UsersID = uint(logged)
 
-	_, er := databases.UpdateCart(id, &cart)
-	if er != nil {
+	//mengecek user id nya sama dan ada pada tabel
+	id_user_cart, id_product, _ := databases.GetIDUserCart(id)
+	// log.Println("id_user_cart", id_user_cart)
+	logged := middlewares.ExtractTokenId(c)
+	// log.Println("idlogged", logged)
+	if id_user_cart == 0 {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Bad Request",
 		})
+	} else if uint(logged) != id_user_cart {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
 	}
+
+	//mengupdate total harga
+	harga_product, _ := databases.GetHargaProduct(int(id_product))
+	cart.TotalHarga = cart.Qty * harga_product
+
+	//untuk mengupdate
+	databases.UpdateCart(id, &cart)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
