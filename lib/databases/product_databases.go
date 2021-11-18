@@ -14,7 +14,7 @@ func CreateProduct(product *models.Product) (interface{}, error) {
 
 func GetAllProduct() (interface{}, error) {
 	products := []models.Product{}
-	err := config.DB.Find(products)
+	err := config.DB.Find(&products)
 	if err.Error != nil {
 		return nil, err.Error
 	}
