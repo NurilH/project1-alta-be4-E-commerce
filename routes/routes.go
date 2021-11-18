@@ -26,6 +26,10 @@ func New() *echo.Echo {
 	j.DELETE("/users/:id", controllers.DeleteUserControllers)
 
 	//product
+
+	//
+	//
+	//
 	j.POST("/product", controllers.CreateProductControllers)
 
 	j.GET("/products", controllers.GetProductsController)

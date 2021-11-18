@@ -5,6 +5,26 @@ import (
 	"project_altabe4_1/models"
 )
 
+// a
+// a
+
+// a
+// a
+// a
+// a
+
+// a
+// a
+// a
+// a
+
+func CreateProduct(product *models.Product) (interface{}, error) {
+	if err := config.DB.Create(&product).Error; err != nil {
+		return nil, err
+	}
+	return product, nil
+}
+
 func GetAllProduct() (interface{}, error) {
 	products := []models.Product{}
 	err := config.DB.Find(products)
@@ -12,11 +32,4 @@ func GetAllProduct() (interface{}, error) {
 		return nil, err.Error
 	}
 	return products, nil
-}
-
-func CreateProduct(product *models.Product) (interface{}, error) {
-	if err := config.DB.Create(&product).Error; err != nil {
-		return nil, err
-	}
-	return product, nil
 }
