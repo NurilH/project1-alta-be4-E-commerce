@@ -19,6 +19,7 @@ func New() *echo.Echo {
 
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
+
 	// group JWT
 	j := e.Group("/jwt")
 	j.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
