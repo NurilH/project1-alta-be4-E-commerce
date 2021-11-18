@@ -8,18 +8,65 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// a
-// a
-// a
-// aa
+/*
 
-// a
-// a
-// a
-// a
 
-// a
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
 func CreateProductControllers(c echo.Context) error {
 	Product := models.Product{}
 	c.Bind(&Product)

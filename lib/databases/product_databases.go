@@ -8,15 +8,41 @@ import (
 // a
 // a
 
-// a
-// a
-// a
-// a
+/*
 
-// a
-// a
-// a
-// a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
 
 func CreateProduct(product *models.Product) (interface{}, error) {
 	if err := config.DB.Create(&product).Error; err != nil {
