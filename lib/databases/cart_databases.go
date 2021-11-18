@@ -27,3 +27,9 @@ func GetAllCart() (interface{}, error) {
 	}
 	return carts, nil
 }
+func CreateCart(Cart *models.Cart) (interface{}, error) {
+	if err := config.DB.Create(&Cart).Error; err != nil {
+		return nil, err
+	}
+	return Cart.UsersID, nil
+}
