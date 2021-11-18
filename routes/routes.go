@@ -30,5 +30,7 @@ func New() *echo.Echo {
 
 	j.GET("/products/:id", controllers.GetProductByIdControllers)
 	j.DELETE("/products/:id", controllers.DeleteProductControllers)
+	//product
+
 	return e
 }

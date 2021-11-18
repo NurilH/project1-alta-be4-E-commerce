@@ -60,7 +60,6 @@ func DeleteProductControllers(c echo.Context) error {
 			"message": "Bad Request",
 		})
 	}
-
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
