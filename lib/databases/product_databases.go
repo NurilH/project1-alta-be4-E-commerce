@@ -20,5 +20,3 @@ func CreateProduct(product *models.Product) (interface{}, error) {
 	}
 	return product, nil
 }
-
-
