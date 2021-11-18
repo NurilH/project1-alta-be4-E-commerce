@@ -34,5 +34,9 @@ func New() *echo.Echo {
 	j.POST("/products", controllers.CreateProductControllers)
 	j.GET("/products", controllers.GetProductsControllers)
 	j.PUT("/products/:id", controllers.UpdateProductControllers)
+
+	//cart
+	j.POST("/cart", controllers.CreateCartControllers)
+
 	return e
 }
