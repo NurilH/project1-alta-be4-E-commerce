@@ -17,6 +17,9 @@ func New() *echo.Echo {
 	// e.DELETE("/users/:id", controllers.DeleteUserControllers)
 	e.POST("/login", controllers.LoginUserControllers)
 
+	// e.GET("/products/:id", controllers.GetProductByIdControllers)
+	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
+
 	// group JWT
 	j := e.Group("/jwt")
 	j.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
@@ -25,13 +28,11 @@ func New() *echo.Echo {
 	j.PUT("/users/:id", controllers.UpdateUserControllers)
 	j.DELETE("/users/:id", controllers.DeleteUserControllers)
 
+	j.GET("/products/:id", controllers.GetProductByIdControllers)
+	j.DELETE("/products/:id", controllers.DeleteProductControllers)
+
 	//product
 
-	//
-	//
-	//
-
-	//
 	j.POST("/product", controllers.CreateProductControllers)
 
 	j.GET("/products", controllers.GetProductsController)

@@ -5,50 +5,11 @@ import (
 	"project_altabe4_1/models"
 )
 
-// a
-// a
-
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- */
-
 func CreateProduct(product *models.Product) (interface{}, error) {
 	if err := config.DB.Create(&product).Error; err != nil {
 		return nil, err
 	}
-	return product, nil
+	return product.UsersID, nil
 }
 
 func GetAllProduct() (interface{}, error) {
