@@ -19,7 +19,7 @@ func New() *echo.Echo {
 
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
-	e.GET("/products", controllers.GetProductsController)
+	// e.GET("/products", controllers.GetProductsController)
 	e.PUT("/products/:id", controllers.UpdateProductControllers)
 
 	// group JWT
@@ -34,7 +34,7 @@ func New() *echo.Echo {
 	j.GET("/products/:id", controllers.GetProductByIdControllers)
 	j.DELETE("/products/:id", controllers.DeleteProductControllers)
 	j.POST("/products", controllers.CreateProductControllers)
-	j.GET("/products", controllers.GetProductsController)
+	j.GET("/products", controllers.GetProductsControllers)
 	j.PUT("/products/:id", controllers.UpdateProductControllers)
 	return e
 }

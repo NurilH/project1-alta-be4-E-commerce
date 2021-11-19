@@ -30,7 +30,7 @@ func CreateProductControllers(c echo.Context) error {
 	})
 }
 
-func GetProductsController(c echo.Context) error {
+func GetProductsControllers(c echo.Context) error {
 	products, err := databases.GetAllProduct()
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
