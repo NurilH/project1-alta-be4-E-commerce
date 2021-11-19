@@ -121,3 +121,23 @@ func UpdateProductControllers(c echo.Context) error {
 		"message": "Successful Operation",
 	})
 }
+
+func CreateProductControllersTesting() echo.HandlerFunc {
+	return CreateProductControllers
+}
+
+func GetProductsControllerTesting() echo.HandlerFunc {
+	return GetProductsController
+}
+
+func GetProductByIdControllersTesting() echo.HandlerFunc {
+	return GetProductByIdControllers
+}
+
+func DeleteProductControllersTesting() echo.HandlerFunc {
+	return DeleteProductControllers
+}
+
+func UpdateProductControllersTesting() echo.HandlerFunc {
+	return UpdateProductControllers
+}
