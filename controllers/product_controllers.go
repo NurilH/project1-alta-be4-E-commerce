@@ -11,127 +11,113 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetUserControllers(c echo.Context) error {
-	id := c.Param("id")
-	conv_id, err := strconv.Atoi(id)
-	log.Println("id", conv_id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "False Param",
-		})
-	}
-	user, e := databases.GetUser(conv_id)
-	if e != nil || user == nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-		"data":    user,
-	})
-}
-
-func CreateUserControllers(c echo.Context) error {
-	new_user := models.Users{}
-	c.Bind(&new_user)
-	_, e := databases.CreateUser(&new_user)
+func CreateProductControllers(c echo.Context) error {
+	Product := models.Product{}
+	c.Bind(&Product)
+	logged := middlewares.ExtractTokenId(c)
+	Product.UsersID = uint(logged)
+	_, e := databases.CreateProduct(&Product)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Bad Request",
 		})
 	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
 	})
 }
 
-func DeleteUserControllers(c echo.Context) error {
+func GetProductsControllers(c echo.Context) error {
+	products, err := databases.GetAllProduct()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"data":    products,
+	})
+}
+
+func GetProductByIdControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
-
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "False Param",
 		})
 	}
+	product, e := databases.GetProductById(conv_id)
+	if e != nil || product == nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"data":    product,
+	})
+}
 
+func DeleteProductControllers(c echo.Context) error {
+	id := c.Param("id")
+	conv_id, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
+	id_user_product, _ := databases.GetIDUserProduct(conv_id)
+	log.Println("id_user_product", id_user_product)
 	logged := middlewares.ExtractTokenId(c)
-	if logged != conv_id {
+	log.Println("idlogged", logged)
+	if uint(logged) != id_user_product {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Access Forbidden",
 		})
 	}
+	databases.DeleteProduct(conv_id)
 
-	_, e := databases.DeleteUser(conv_id)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
 	})
 }
 
-func UpdateUserControllers(c echo.Context) error {
+func UpdateProductControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
-
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "False Param",
 		})
-
 	}
-
+	id_user_product, _ := databases.GetIDUserProduct(id)
 	logged := middlewares.ExtractTokenId(c)
-	if logged != id {
+
+	if logged != int(id_user_product) {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Access Forbidden",
 		})
 	}
-	users := models.Users{}
-	c.Bind(&users)
 
-	_, e := databases.UpdateUser(id, &users)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
-
+	product := models.Product{}
+	c.Bind(&product)
+	databases.UpdateProduct(id, &product)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
-	})
-}
-
-func LoginUserControllers(c echo.Context) error {
-	user := models.Users{}
-	c.Bind(&user)
-
-	token, e := databases.LoginUser(&user)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Login Failed",
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Login Success",
-		"data":    token,
 	})
 }

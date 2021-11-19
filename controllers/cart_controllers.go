@@ -11,66 +11,27 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetUserControllers(c echo.Context) error {
-	id := c.Param("id")
-	conv_id, err := strconv.Atoi(id)
-	log.Println("id", conv_id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "False Param",
-		})
-	}
-	user, e := databases.GetUser(conv_id)
-	if e != nil || user == nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-		"data":    user,
-	})
-}
+func CreateCartControllers(c echo.Context) error {
 
-func CreateUserControllers(c echo.Context) error {
-	new_user := models.Users{}
-	c.Bind(&new_user)
-	_, e := databases.CreateUser(&new_user)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-	})
-}
-
-func DeleteUserControllers(c echo.Context) error {
-	id := c.Param("id")
-	conv_id, err := strconv.Atoi(id)
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "False Param",
-		})
-	}
+	Cart := models.Cart{}
+	c.Bind(&Cart)
+	log.Println(Cart.ProductID)
 
 	logged := middlewares.ExtractTokenId(c)
-	if logged != conv_id {
+
+	id_user_cart, _ := databases.GetIDUserProduct(int(Cart.ProductID))
+	harga_product, _ := databases.GetHargaProduct(int(Cart.ProductID))
+
+	Cart.UsersID = uint(logged)
+	Cart.TotalHarga = Cart.Qty * harga_product
+
+	if uint(logged) == id_user_cart {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Access Forbidden",
 		})
 	}
-
-	_, e := databases.DeleteUser(conv_id)
+	_, e := databases.CreateCart(&Cart)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
@@ -79,59 +40,88 @@ func DeleteUserControllers(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
+		"message": "Successful Operation"})
+}
+
+func GetAllCartControllers(c echo.Context) error {
+	cart, err := databases.GetAllCart()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"data":    cart,
+	})
+}
+
+func DeleteCartControllers(c echo.Context) error {
+	id := c.Param("id")
+	conv_id, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "False Param",
+		})
+	}
+	id_user_cart, _, _ := databases.GetIDUserCart(conv_id)
+	log.Println("id_user_cart", id_user_cart)
+	logged := middlewares.ExtractTokenId(c)
+	log.Println("idlogged", logged)
+	if uint(logged) != id_user_cart {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Access Forbidden",
+		})
+	}
+	databases.DeleteCart(conv_id)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
 		"message": "Successful Operation",
 	})
 }
 
-func UpdateUserControllers(c echo.Context) error {
+func UpdateCartControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
-
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "False Param",
 		})
-
 	}
 
+	cart := models.Cart{}
+	c.Bind(&cart)
+
+	//mengecek user id nya sama dan ada pada tabel
+	id_user_cart, id_product, _ := databases.GetIDUserCart(id)
+	// log.Println("id_user_cart", id_user_cart)
 	logged := middlewares.ExtractTokenId(c)
-	if logged != id {
+	// log.Println("idlogged", logged)
+	if id_user_cart == 0 {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	} else if uint(logged) != id_user_cart {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Access Forbidden",
 		})
 	}
-	users := models.Users{}
-	c.Bind(&users)
 
-	_, e := databases.UpdateUser(id, &users)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
-	}
+	//mengupdate total harga
+	harga_product, _ := databases.GetHargaProduct(int(id_product))
+	cart.TotalHarga = cart.Qty * harga_product
+
+	//untuk mengupdate
+	databases.UpdateCart(id, &cart)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
-	})
-}
-
-func LoginUserControllers(c echo.Context) error {
-	user := models.Users{}
-	c.Bind(&user)
-
-	token, e := databases.LoginUser(&user)
-	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Login Failed",
-		})
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Login Success",
-		"data":    token,
 	})
 }
