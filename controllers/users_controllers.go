@@ -48,6 +48,7 @@ func CreateUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
+		"data":    new_user,
 	})
 }
 
@@ -133,4 +134,16 @@ func LoginUserControllers(c echo.Context) error {
 		"code":    http.StatusOK,
 		"message": "Login Success",
 	})
+}
+
+func GetUserControllersTesting() echo.HandlerFunc {
+	return GetUserControllers
+}
+
+func UpdateUserControllersTesting() echo.HandlerFunc {
+	return UpdateUserControllers
+}
+
+func DeleteUserControllersTesting() echo.HandlerFunc {
+	return DeleteUserControllers
 }

@@ -19,6 +19,8 @@ func New() *echo.Echo {
 
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
+	e.GET("/products", controllers.GetProductsController)
+	e.PUT("/products/:id", controllers.UpdateProductControllers)
 
 	// group JWT
 	j := e.Group("/jwt")
