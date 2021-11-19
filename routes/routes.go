@@ -19,7 +19,7 @@ func New() *echo.Echo {
 
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
-	e.GET("/cart", controllers.GetAllCartControllers)
+	// e.GET("/cart", controllers.GetAllCartControllers)
 
 	// group JWT
 	j := e.Group("/jwt")
@@ -40,7 +40,8 @@ func New() *echo.Echo {
 	//cart
 	j.POST("/cart", controllers.CreateCartControllers)
 	j.PUT("/cart/:id", controllers.UpdateCartControllers)
-
+	j.GET("/cart", controllers.GetAllCartControllers)
 	j.DELETE("/cart/:id", controllers.DeleteCartControllers)
+
 	return e
 }

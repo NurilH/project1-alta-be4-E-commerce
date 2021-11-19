@@ -44,7 +44,8 @@ func CreateCartControllers(c echo.Context) error {
 }
 
 func GetAllCartControllers(c echo.Context) error {
-	cart, err := databases.GetAllCart()
+	logged := middlewares.ExtractTokenId(c)
+	cart, err := databases.GetAllCart(logged)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
