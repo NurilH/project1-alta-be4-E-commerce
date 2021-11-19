@@ -122,7 +122,7 @@ func LoginUserControllers(c echo.Context) error {
 	user := models.Users{}
 	c.Bind(&user)
 
-	_, e := databases.LoginUser(&user)
+	token, e := databases.LoginUser(&user)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
@@ -132,5 +132,6 @@ func LoginUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Login Success",
+		"data":    token,
 	})
 }

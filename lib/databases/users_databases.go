@@ -57,5 +57,5 @@ func LoginUser(user *models.Users) (interface{}, error) {
 	if err = config.DB.Save(user).Error; err != nil {
 		return nil, err
 	}
-	return user, nil
+	return user.Token, nil
 }
