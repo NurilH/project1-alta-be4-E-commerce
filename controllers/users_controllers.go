@@ -48,7 +48,6 @@ func CreateUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
-		"data":    new_user,
 	})
 }
 

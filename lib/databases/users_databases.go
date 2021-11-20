@@ -11,6 +11,7 @@ var user models.Users
 func GetUser(id int) (interface{}, error) {
 	users := models.Users{}
 	type get_user struct {
+		ID    uint
 		Nama  string
 		Email string
 	}
@@ -19,7 +20,7 @@ func GetUser(id int) (interface{}, error) {
 	if err.Error != nil || rows_affected < 1 {
 		return nil, err.Error
 	}
-	return get_user{users.Nama, users.Email}, nil
+	return get_user{users.ID, users.Nama, users.Email}, nil
 }
 
 func CreateUser(user *models.Users) (interface{}, error) {
