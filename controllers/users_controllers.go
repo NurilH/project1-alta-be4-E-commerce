@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"project_altabe4_1/helper"
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/middlewares"
 	"project_altabe4_1/models"
@@ -38,6 +39,7 @@ func GetUserControllers(c echo.Context) error {
 func CreateUserControllers(c echo.Context) error {
 	new_user := models.Users{}
 	c.Bind(&new_user)
+	new_user.Password, _ = helper.HashPassword(new_user.Password)
 	_, e := databases.CreateUser(&new_user)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -104,7 +106,7 @@ func UpdateUserControllers(c echo.Context) error {
 	}
 	users := models.Users{}
 	c.Bind(&users)
-
+	users.Password, _ = helper.HashPassword(users.Password)
 	_, e := databases.UpdateUser(id, &users)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -122,8 +124,9 @@ func UpdateUserControllers(c echo.Context) error {
 func LoginUserControllers(c echo.Context) error {
 	user := models.Users{}
 	c.Bind(&user)
-
-	token, e := databases.LoginUser(&user)
+	plan_pass := user.Password
+	log.Println(plan_pass)
+	token, e := databases.LoginUser(plan_pass, &user)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
