@@ -45,7 +45,11 @@ func New() *echo.Echo {
 	j.GET("/cart", controllers.GetAllCartControllers)
 	j.DELETE("/cart/:id", controllers.DeleteCartControllers)
 
-	j.POST("/order", controllers.CreateOrderControllers)
+	//credit card
+	j.POST("/credit", controllers.CreateCreditControllers)
+	j.DELETE("/credit/:id", controllers.DeleteCreditControllers)
 
+	//order
+	j.POST("/order", controllers.CreateOrderControllers)
 	return e
 }
