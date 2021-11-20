@@ -50,6 +50,6 @@ func New() *echo.Echo {
 	j.DELETE("/credit/:id", controllers.DeleteCreditControllers)
 
 	//order
-	j.POST("/order", controllers.CreateOrderControllers)
+	// j.POST("/order", controllers.CreateOrderControllers)
 	return e
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/models"
 
 	"github.com/labstack/echo/v4"
@@ -14,13 +15,29 @@ func CreateOrderControllers(c echo.Context) error {
 
 	c.Bind(&order_req)
 
-	for _, v := range order_req.CartId {
-		log.Println("id cart :", v)
+	d, er := databases.CreateOrder(&order_req)
+	if er != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
 	}
-
 	log.Println("isi cart :", order_req.CartId)
-	log.Println("isi address zip :", order_req.Address.Zip)
-	log.Println("isi credit card :", order_req.CreditCard.Cvv)
+	log.Println("isi city :", order_req.Address.City)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Successful Operation",
+		"address": d,
+	})
+
+	// for _, v := range order_req.CartId {
+	// 	log.Println("id cart :", v)
+	// }
+
+	// log.Println("isi cart :", order_req.CartId)
+	// log.Println("isi address zip :", order_req.Address.Zip)
+	// log.Println("isi credit card :", order_req.CreditCard.Cvv)
+
 	// Order := models.Order{}
 	// c.Bind(&Order)
 	// // log.Println(Order.ProductID)
@@ -46,8 +63,8 @@ func CreateOrderControllers(c echo.Context) error {
 	// 		"message": "Bad Request",
 	// 	})
 	// }
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation"})
+	// return c.JSON(http.StatusOK, map[string]interface{}{
+	// 	"code":    http.StatusOK,
+	// 	"message": "Successful Operation"})
 
 }

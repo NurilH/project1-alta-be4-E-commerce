@@ -5,11 +5,11 @@ import (
 	"project_altabe4_1/models"
 )
 
-func CreateOrder(Order *models.Order) (interface{}, error) {
-
-	if err := config.DB.Create(&Order).Error; err != nil {
+func CreateOrder(Address *models.OrderRequest) (interface{}, error) {
+	config.DB.Create(&Address.Order)
+	if err := config.DB.Create(&Address.Address).Error; err != nil {
 		return nil, err
 	}
 
-	return Order, nil
+	return Address, nil
 }
