@@ -17,6 +17,8 @@ func New() *echo.Echo {
 	// e.DELETE("/users/:id", controllers.DeleteUserControllers)
 	e.POST("/login", controllers.LoginUserControllers)
 
+	e.POST("/order", controllers.CreateOrderControllers)
+
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
 	// e.GET("/cart", controllers.GetAllCartControllers)
