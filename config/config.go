@@ -27,6 +27,7 @@ func InitMigrate() {
 	DB.AutoMigrate(&models.Users{})
 	DB.AutoMigrate(&models.Product{})
 	DB.AutoMigrate(&models.Cart{})
+	DB.AutoMigrate(&models.Credit{})
 }
 
 // ===============================================================//

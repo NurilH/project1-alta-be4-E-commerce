@@ -43,5 +43,9 @@ func New() *echo.Echo {
 	j.GET("/cart", controllers.GetAllCartControllers)
 	j.DELETE("/cart/:id", controllers.DeleteCartControllers)
 
+	//credit card
+	j.POST("/credit", controllers.CreateCreditControllers)
+	j.DELETE("/credit/:id", controllers.DeleteCreditControllers)
+
 	return e
 }
