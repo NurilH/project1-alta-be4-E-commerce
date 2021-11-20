@@ -8,5 +8,4 @@ type Cart struct {
 	TotalHarga int  `json:"total_harga" form:"total_harga"`
 	ProductID  uint `json:"product_id" form:"product_id"`
 	UsersID    uint
-	Order      []Order
 }
