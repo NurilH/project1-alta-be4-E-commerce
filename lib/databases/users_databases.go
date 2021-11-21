@@ -10,6 +10,7 @@ import (
 
 var user models.Users
 
+// function database untuk menampilkan user by id
 func GetUser(id int) (interface{}, error) {
 	users := models.Users{}
 	type get_user struct {
@@ -24,6 +25,7 @@ func GetUser(id int) (interface{}, error) {
 	return get_user{users.Nama, users.Email}, nil
 }
 
+// function database untuk menambahkan user baru (registrasi)
 func CreateUser(user *models.Users) (interface{}, error) {
 	if err := config.DB.Create(&user).Error; err != nil {
 		return nil, err
@@ -31,6 +33,7 @@ func CreateUser(user *models.Users) (interface{}, error) {
 	return user, nil
 }
 
+// function database untuk menghapus user by id
 func DeleteUser(id int) (interface{}, error) {
 	if err := config.DB.Where("id = ?", id).Delete(&user).Error; err != nil {
 		return nil, err
@@ -39,6 +42,7 @@ func DeleteUser(id int) (interface{}, error) {
 	return user, nil
 }
 
+// function database untuk memperbarui data user by id
 func UpdateUser(id int, user *models.Users) (interface{}, error) {
 	if err := config.DB.Where("id = ?", id).Updates(&user).Error; err != nil {
 		return nil, err
@@ -47,20 +51,19 @@ func UpdateUser(id int, user *models.Users) (interface{}, error) {
 	return user, nil
 }
 
+// function login database untuk mendapatkan token
 func LoginUser(plan_pass string, user *models.Users) (interface{}, error) {
 	err := config.DB.Where("email = ?", user.Email).First(&user).Error
-	// log.Println(err)
-	// log.Println("userpass", user.Password)
 	if err != nil {
 		return nil, err
 	}
-	// match, err := helper.CheckHashPassword(user.Password, plan_pass)
+
+	// cek plan password dengan hash password
 	match := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(plan_pass))
-	// log.Println("match", match)
 	if match != nil {
 		return nil, match
 	}
-	user.Token, err = middlewares.CreateToken(int(user.ID))
+	user.Token, err = middlewares.CreateToken(int(user.ID)) // generate token
 	if err != nil {
 		return nil, err
 	}

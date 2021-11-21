@@ -27,6 +27,7 @@ type Login struct {
 	Password string
 }
 
+// data dummy
 var (
 	mock_data_user = models.Users{
 		Nama:     "andri",
@@ -39,6 +40,7 @@ var (
 	}
 )
 
+// inisialisasi echo
 func InitEcho() *echo.Echo {
 	config.InitDBTest()
 	e := echo.New()
@@ -46,6 +48,7 @@ func InitEcho() *echo.Echo {
 	return e
 }
 
+// menambahkan user
 func InsertUser() error {
 	if err := config.DB.Save(&mock_data_user).Error; err != nil {
 		return err
@@ -53,7 +56,7 @@ func InsertUser() error {
 	return nil
 }
 
-//test get user
+// test get user by id success
 func TestGetUserControllers(t *testing.T) {
 	testCases := struct {
 		name string
@@ -102,7 +105,7 @@ func TestGetUserControllers(t *testing.T) {
 
 }
 
-//test get user error
+// test get user by id error
 func TestGetUserControllersError(t *testing.T) {
 	testCases := struct {
 		name string
@@ -139,7 +142,7 @@ func TestGetUserControllersError(t *testing.T) {
 	}
 }
 
-//test create user
+// test create user success
 func TestCreateUserController(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -159,7 +162,7 @@ func TestCreateUserController(t *testing.T) {
 		t.Error(t, err, "error")
 	}
 
-	//send data using request body with HTTP Method POST
+	// send data using request body with HTTP Method POST
 	req := httptest.NewRequest(http.MethodPost, testCases.path, bytes.NewBuffer(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
@@ -181,7 +184,7 @@ func TestCreateUserController(t *testing.T) {
 
 }
 
-//test create user error
+// test create user error
 func TestCreateUserControllerError(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -202,7 +205,7 @@ func TestCreateUserControllerError(t *testing.T) {
 		t.Error(t, err, "error")
 	}
 
-	//send data using request body with HTTP Method POST
+	// send data using request body with HTTP Method POST
 	req := httptest.NewRequest(http.MethodPost, testCases.path, bytes.NewBuffer(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
@@ -224,7 +227,7 @@ func TestCreateUserControllerError(t *testing.T) {
 
 }
 
-//test update user
+// test update user by id success
 func TestUpdateUserController(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -272,7 +275,7 @@ func TestUpdateUserController(t *testing.T) {
 	})
 }
 
-//test update user error
+// test update user by id error
 func TestUpdateUserControllerError(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -321,6 +324,7 @@ func TestUpdateUserControllerError(t *testing.T) {
 
 }
 
+// test update user by id forbidden
 func TestUpdateUserControllerForbidden(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -369,7 +373,7 @@ func TestUpdateUserControllerForbidden(t *testing.T) {
 
 }
 
-//test delete user
+// test delete user by id success
 func TestDeleteUserController(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -417,7 +421,7 @@ func TestDeleteUserController(t *testing.T) {
 
 }
 
-//test delete user error
+// test delete user by id error
 func TestDeleteUserControllerError(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -466,6 +470,7 @@ func TestDeleteUserControllerError(t *testing.T) {
 
 }
 
+// test delete user by id forbidden
 func TestDeleteUserControllerForbidden(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -513,7 +518,7 @@ func TestDeleteUserControllerForbidden(t *testing.T) {
 
 }
 
-// test get user error param
+// test get user false param
 func TestGetUserControllersFalseParam(t *testing.T) {
 	testCases := struct {
 		name string
@@ -550,7 +555,7 @@ func TestGetUserControllersFalseParam(t *testing.T) {
 	}
 }
 
-// test update user error param
+// test update user vy id false param
 func TestUpdateUserControllersFalseParam(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -599,7 +604,7 @@ func TestUpdateUserControllersFalseParam(t *testing.T) {
 	})
 }
 
-// test delete user error param
+// test delete user by id false param
 func TestDeleteUserControllersFalseParam(t *testing.T) {
 	var testCases = struct {
 		name       string
@@ -646,7 +651,7 @@ func TestDeleteUserControllersFalseParam(t *testing.T) {
 	})
 }
 
-//test login success
+// test login success
 func TestLoginGetUsersControllers(t *testing.T) {
 	testCases := struct {
 		name         string
@@ -686,7 +691,7 @@ func TestLoginGetUsersControllers(t *testing.T) {
 	}
 }
 
-//tes login error
+// tes login failure
 func TestLoginUserControllersError(t *testing.T) {
 	testCases := struct {
 		name         string
