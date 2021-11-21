@@ -64,17 +64,17 @@ Berikut merupakan fitur yang terdapat dalam e-commerce alta store :
 <div>
       <ul>
         <li><h5>Users</h5></li>
-        <p>Users dapat melakukan Create, Read, Update, Delete (CRUD) pada data user.</p>
-        <p>User yang telah melakukan registrasi (create) dapat melakukan login.</p>
+        <p>Users dapat melakukan Create, Read, Update, Delete (CRUD) pada data user.
+        <br>User yang telah melakukan registrasi (create) dapat melakukan login.</p>
         <li><h5>Products</h5></a></li>
-        <p>Users dapat melakukan Create, Read, Update, Delete (CRUD) pada data product.</p>
-        <p>Fitur Update dan Delete hanya dapat dilakukan pada produk miliknya sendiri.</p>
-        <p>User dapat melihat semua data product termasuk product yang dimilikinya sendiri.</p>
+        <p>Users dapat melakukan Create, Read, Update, Delete (CRUD) pada data product.
+        <br>Fitur Update dan Delete hanya dapat dilakukan pada produk miliknya sendiri.
+        <br>User dapat melihat semua data product termasuk product yang dimilikinya sendiri.</p>
         <li><h5>Cart</h5></a></li>
         <p>Users dapat melakukan Create, Read, Update, Delete (CRUD) pada data Cart.</p>
         <li><h5>Order</h5></a></li>
-        <p>Users dapat melakukan order product yang ada pada cart.</p>
-        <p>Users dapat melihat history order dan cancel order</p>
+        <p>Users dapat melakukan order product yang ada pada cart.
+        <br>Users dapat melihat history order dan cancel order.</p>
       </ul>
 </div>
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -115,8 +115,9 @@ Contributor :
 Mentor :
 <br>
 <!-- https://www.linkedin.com/in/iffakhry/ -->
-[![Linkedin: Fakhry Ihsan](https://img.shields.io/badge/-iffakhry-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/iffakhry/)](https://www.linkedin.com/in/iffakhry/)
+[![Linkedin: Fakhry Ihsan](https://img.shields.io/badge/-FakhryIhsan-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/iffakhry/)](https://www.linkedin.com/in/iffakhry/)
 [![GitHub Fakhry Ihsan](https://img.shields.io/github/followers/iffakhry?label=follow&style=social)](https://github.com/iffakhry)
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 <h3>

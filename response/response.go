@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+// function response false param
 func FalseParamResponse() map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusBadRequest,
@@ -12,6 +13,7 @@ func FalseParamResponse() map[string]interface{} {
 	return result
 }
 
+// function response bad request
 func BadRequestResponse() map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusBadRequest,
@@ -20,6 +22,7 @@ func BadRequestResponse() map[string]interface{} {
 	return result
 }
 
+// function response access forbidden
 func AccessForbiddenResponse() map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusBadRequest,
@@ -28,6 +31,7 @@ func AccessForbiddenResponse() map[string]interface{} {
 	return result
 }
 
+// function response success dengan paramater
 func SuccessResponseData(data interface{}) map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusOK,
@@ -37,6 +41,7 @@ func SuccessResponseData(data interface{}) map[string]interface{} {
 	return result
 }
 
+// function response success tanpa parameter
 func SuccessResponseNonData() map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusOK,
@@ -45,6 +50,7 @@ func SuccessResponseNonData() map[string]interface{} {
 	return result
 }
 
+// function response login failure
 func LoginFailedResponse() map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusBadRequest,
@@ -53,6 +59,7 @@ func LoginFailedResponse() map[string]interface{} {
 	return result
 }
 
+// function response login success
 func LoginSuccessResponse(data interface{}) map[string]interface{} {
 	result := map[string]interface{}{
 		"code":    http.StatusOK,

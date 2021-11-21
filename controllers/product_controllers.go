@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/middlewares"
@@ -12,6 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// controller untuk membuat produk
 func CreateProductControllers(c echo.Context) error {
 	Product := models.Product{}
 	c.Bind(&Product)
@@ -24,6 +24,7 @@ func CreateProductControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
+// controller untuk menampilkan seluruh produk
 func GetProductsControllers(c echo.Context) error {
 	products, err := databases.GetAllProduct()
 	if err != nil {
@@ -32,6 +33,7 @@ func GetProductsControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseData(products))
 }
 
+// controller untuk menampilkan produk by id
 func GetProductByIdControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
@@ -45,6 +47,7 @@ func GetProductByIdControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseData(product))
 }
 
+// controller untuk menghapus produk by id
 func DeleteProductControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
@@ -52,9 +55,7 @@ func DeleteProductControllers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 	id_user_product, _ := databases.GetIDUserProduct(conv_id)
-	log.Println("id_user_product", id_user_product)
 	logged := middlewares.ExtractTokenId(c)
-	log.Println("idlogged", logged)
 	if uint(logged) != id_user_product {
 		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
@@ -62,6 +63,7 @@ func DeleteProductControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
+// controller untuk memperbarui data produk by id
 func UpdateProductControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// controller untuk membuat cart
 func CreateCartControllers(c echo.Context) error {
 
 	Cart := models.Cart{}
@@ -36,6 +37,7 @@ func CreateCartControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
+// controller untuk mendapatkan semua cart by id user
 func GetAllCartControllers(c echo.Context) error {
 	logged := middlewares.ExtractTokenId(c)
 	cart, err := databases.GetAllCart(logged)
@@ -45,6 +47,7 @@ func GetAllCartControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseData(cart))
 }
 
+// controller untuk menghapus cart by id
 func DeleteCartControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
@@ -52,9 +55,7 @@ func DeleteCartControllers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 	id_user_cart, _, _ := databases.GetIDUserCart(conv_id)
-	log.Println("id_user_cart", id_user_cart)
 	logged := middlewares.ExtractTokenId(c)
-	log.Println("idlogged", logged)
 	if uint(logged) != id_user_cart {
 		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
@@ -71,22 +72,20 @@ func UpdateCartControllers(c echo.Context) error {
 	cart := models.Cart{}
 	c.Bind(&cart)
 
-	//mengecek user id nya sama dan ada pada tabel
+	// mengecek user id nya sama dan ada pada tabel
 	id_user_cart, id_product, _ := databases.GetIDUserCart(id)
-	// log.Println("id_user_cart", id_user_cart)
 	logged := middlewares.ExtractTokenId(c)
-	// log.Println("idlogged", logged)
 	if id_user_cart == 0 {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	} else if uint(logged) != id_user_cart {
 		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
 
-	//mengupdate total harga
+	// mengupdate total harga
 	harga_product, _ := databases.GetHargaProduct(int(id_product))
 	cart.TotalHarga = cart.Qty * harga_product
 
-	//untuk mengupdate
+	// untuk mengupdate
 	databases.UpdateCart(id, &cart)
 
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())

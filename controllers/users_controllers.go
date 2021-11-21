@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// controller untuk menampilkan data user by id
 func GetUserControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
@@ -27,10 +28,11 @@ func GetUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseData(user))
 }
 
+// controller untuk menambahkan user (registrasi)
 func CreateUserControllers(c echo.Context) error {
 	new_user := models.Users{}
 	c.Bind(&new_user)
-	new_user.Password, _ = helper.HashPassword(new_user.Password)
+	new_user.Password, _ = helper.HashPassword(new_user.Password) // generate plan password menjadi hash
 	_, e := databases.CreateUser(&new_user)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
@@ -38,6 +40,7 @@ func CreateUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseData(new_user))
 }
 
+// controller untuk menghapus user by id
 func DeleteUserControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
@@ -46,7 +49,7 @@ func DeleteUserControllers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 
-	logged := middlewares.ExtractTokenId(c)
+	logged := middlewares.ExtractTokenId(c) // check token
 	if logged != conv_id {
 		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
@@ -58,6 +61,7 @@ func DeleteUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
+// controller untuk memperbarui data user by id (update)
 func UpdateUserControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 
@@ -65,13 +69,13 @@ func UpdateUserControllers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 
-	logged := middlewares.ExtractTokenId(c)
+	logged := middlewares.ExtractTokenId(c) // check token
 	if logged != id {
 		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
 	users := models.Users{}
 	c.Bind(&users)
-	users.Password, _ = helper.HashPassword(users.Password)
+	users.Password, _ = helper.HashPassword(users.Password) // generate plan password menjadi hash
 	_, e := databases.UpdateUser(id, &users)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
@@ -79,6 +83,7 @@ func UpdateUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
+// controller untuk login dan generate token (by email dan password)
 func LoginUserControllers(c echo.Context) error {
 	user := models.Users{}
 	c.Bind(&user)
@@ -91,14 +96,17 @@ func LoginUserControllers(c echo.Context) error {
 	return c.JSON(http.StatusOK, response.LoginSuccessResponse(token))
 }
 
+// controller untuk kebutuhan testing get user
 func GetUserControllersTesting() echo.HandlerFunc {
 	return GetUserControllers
 }
 
+// controller untuk kebutuhan testing update user
 func UpdateUserControllersTesting() echo.HandlerFunc {
 	return UpdateUserControllers
 }
 
+// controller untuk kebutuhan testing delete user
 func DeleteUserControllersTesting() echo.HandlerFunc {
 	return DeleteUserControllers
 }
