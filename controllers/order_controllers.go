@@ -10,61 +10,36 @@ import (
 )
 
 func CreateOrderControllers(c echo.Context) error {
-
 	order_req := models.OrderRequest{}
-
 	c.Bind(&order_req)
 
-	d, er := databases.CreateOrder(&order_req)
+	// var d interface{}
+	// var er error
+	for _, v := range order_req.DetailCartId {
+		log.Println("id detail detail", v)
+		order := models.Order{}
+		order.DetailId = v
+		order.TotalQty = order_req.Order.TotalQty
+		order.CreditID = order_req.Order.CreditID
+		order.StatusOrder = order_req.Order.StatusOrder
+		databases.CreateOrderDet(&order)
+	}
+
+	order_detail, er := databases.CreateOrder(&order_req)
 	if er != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
 			"message": "Bad Request",
 		})
 	}
-	log.Println("isi cart :", order_req.CartId)
+
+	log.Println("isi cart :", order_req.DetailCartId)
 	log.Println("isi city :", order_req.Address.City)
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
-		"address": d,
+		"address": order_detail,
 	})
-
-	// for _, v := range order_req.CartId {
-	// 	log.Println("id cart :", v)
-	// }
-
-	// log.Println("isi cart :", order_req.CartId)
-	// log.Println("isi address zip :", order_req.Address.Zip)
-	// log.Println("isi credit card :", order_req.CreditCard.Cvv)
-
-	// Order := models.Order{}
-	// c.Bind(&Order)
-	// // log.Println(Order.ProductID)
-
-	// logged := middlewares.ExtractTokenId(c)
-
-	// // id_user_Order, _ := databases.GetIDUserProduct(int(Order.CartID))
-	// // harga_product, _ := databases.GetHargaProduct(int(Order.CartID))
-
-	// // Order.UsersID = uint(logged)
-	// // Order.TotalHarga = Order.TotalQty * harga_product
-
-	// if uint(logged) == id_user_Order {
-	// 	return c.JSON(http.StatusBadRequest, map[string]interface{}{
-	// 		"code":    http.StatusBadRequest,
-	// 		"message": "Access Forbidden",
-	// 	})
-	// }
-	// _, e := databases.CreateOrder(&Order)
-	// if e != nil {
-	// 	return c.JSON(http.StatusBadRequest, map[string]interface{}{
-	// 		"code":    http.StatusBadRequest,
-	// 		"message": "Bad Request",
-	// 	})
-	// }
-	// return c.JSON(http.StatusOK, map[string]interface{}{
-	// 	"code":    http.StatusOK,
-	// 	"message": "Successful Operation"})
 
 }

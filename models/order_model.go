@@ -7,6 +7,7 @@ type Order struct {
 	StatusOrder bool `json:"status_order" form:"status_order"`
 	TotalQty    int  `json:"total_qty" form:"total_qty"`
 	CreditID    uint `json:"credit_id" form:"credit_id"`
+	DetailId    int
 }
 
 type AddressRequest struct {
@@ -15,6 +16,12 @@ type AddressRequest struct {
 	City   string `json:"city" form:"city"`
 	State  string `json:"state" form:"state"`
 	Zip    int    `json:"zip" form:"zip"`
+}
+
+type OrderRequest struct {
+	DetailCartId []int          `json:"detail_cart_id" form:"detail_cart_id"`
+	Order        Order          `json:"order" form:"order"`
+	Address      AddressRequest `json:"address" form:"address"`
 }
 
 // type CreditCardRequest struct {
@@ -32,9 +39,3 @@ type AddressRequest struct {
 // 	Address AddressRequest `json:"address" form:"address"`
 // 	CreditCard CreditCardRequest `json:"credit_card" form:"credit_card"`
 // }
-
-type OrderRequest struct {
-	CartId  []int          `json:"cart_id" form:"cart_id"`
-	Order   Order          `json:"order" form:"order"`
-	Address AddressRequest `json:"address" form:"address"`
-}
