@@ -17,7 +17,7 @@ func New() *echo.Echo {
 	// e.DELETE("/users/:id", controllers.DeleteUserControllers)
 	e.POST("/login", controllers.LoginUserControllers)
 
-	e.POST("/order", controllers.CreateOrderControllers)
+	// e.POST("/order", controllers.CreateOrderControllers)
 
 	// e.GET("/products/:id", controllers.GetProductByIdControllers)
 	// e.DELETE("/products/:id", controllers.DeleteProductControllers)
@@ -50,6 +50,8 @@ func New() *echo.Echo {
 	j.DELETE("/credit/:id", controllers.DeleteCreditControllers)
 
 	//order
-	// j.POST("/order", controllers.CreateOrderControllers)
+	j.POST("/order", controllers.CreateOrderControllers)
+
+	j.GET("/order", controllers.GetOrderControllers)
 	return e
 }

@@ -11,4 +11,5 @@ type Users struct {
 	Product  []Product
 	Cart     []Cart
 	Credit   []Credit
+	Order    []Order
 }

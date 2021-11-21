@@ -4,17 +4,18 @@ import "gorm.io/gorm"
 
 type Order struct {
 	gorm.Model
-	StatusOrder bool `json:"status_order" form:"status_order"`
-	TotalQty    int  `json:"total_qty" form:"total_qty"`
-	CreditID    uint `json:"credit_id" form:"credit_id"`
-	DetailID    uint
+	StatusOrder    bool `json:"status_order" form:"status_order"`
+	TotalQty       int  `json:"total_qty" form:"total_qty"`
+	TotalHarga     int  `json:"total_harga" form:"total_harga"`
+	CreditID       uint `json:"credit_id" form:"credit_id"`
+	AddressRequest uint
+	UsersID        uint
 }
 
 type DaftarOrder struct {
 	gorm.Model
-	OrderID          uint
-	AddressRequestID uint
-	DetailCartId     int
+	OrderID uint
+	CartID  uint
 }
 
 type AddressRequest struct {
@@ -30,19 +31,3 @@ type OrderRequest struct {
 	Order        Order          `json:"order" form:"order"`
 	Address      AddressRequest `json:"address" form:"address"`
 }
-
-// type CreditCardRequest struct {
-// 	Type   string `json:"type" form:"type"`
-// 	Name   string `json:"name" form:"name"`
-// 	Number int    `json:"number" form:"number"`
-// 	Cvv    int    `json:"cvv" form:"cvv"`
-// 	Month  int    `json:"month" form:"month"`
-// 	Year   int    `json:"year" form:"year"`
-// }
-
-// type OrderRequest struct {
-// 	gorm.Model
-// 	CartId  int            `json:"cart_id" form:"cart_id"`
-// 	Address AddressRequest `json:"address" form:"address"`
-// 	CreditCard CreditCardRequest `json:"credit_card" form:"credit_card"`
-// }
