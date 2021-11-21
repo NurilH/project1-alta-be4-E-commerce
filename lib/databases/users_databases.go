@@ -4,6 +4,8 @@ import (
 	"project_altabe4_1/config"
 	"project_altabe4_1/middlewares"
 	"project_altabe4_1/models"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var user models.Users
@@ -45,10 +47,18 @@ func UpdateUser(id int, user *models.Users) (interface{}, error) {
 	return user, nil
 }
 
-func LoginUser(user *models.Users) (interface{}, error) {
-	err := config.DB.Where("email = ? AND password = ?", user.Email, user.Password).First(user).Error
+func LoginUser(plan_pass string, user *models.Users) (interface{}, error) {
+	err := config.DB.Where("email = ?", user.Email).First(&user).Error
+	// log.Println(err)
+	// log.Println("userpass", user.Password)
 	if err != nil {
 		return nil, err
+	}
+	// match, err := helper.CheckHashPassword(user.Password, plan_pass)
+	match := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(plan_pass))
+	// log.Println("match", match)
+	if match != nil {
+		return nil, match
 	}
 	user.Token, err = middlewares.CreateToken(int(user.ID))
 	if err != nil {
