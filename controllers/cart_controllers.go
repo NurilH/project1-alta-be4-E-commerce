@@ -6,6 +6,7 @@ import (
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/middlewares"
 	"project_altabe4_1/models"
+	"project_altabe4_1/response"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -26,72 +27,45 @@ func CreateCartControllers(c echo.Context) error {
 	Cart.TotalHarga = Cart.Qty * harga_product
 
 	if uint(logged) == id_user_cart {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Access Forbidden",
-		})
+		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
 	_, e := databases.CreateCart(&Cart)
 	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
+		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation"})
+	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
 func GetAllCartControllers(c echo.Context) error {
 	logged := middlewares.ExtractTokenId(c)
 	cart, err := databases.GetAllCart(logged)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
+		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-		"data":    cart,
-	})
+	return c.JSON(http.StatusOK, response.SuccessResponseData(cart))
 }
 
 func DeleteCartControllers(c echo.Context) error {
 	id := c.Param("id")
 	conv_id, err := strconv.Atoi(id)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "False Param",
-		})
+		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 	id_user_cart, _, _ := databases.GetIDUserCart(conv_id)
 	log.Println("id_user_cart", id_user_cart)
 	logged := middlewares.ExtractTokenId(c)
 	log.Println("idlogged", logged)
 	if uint(logged) != id_user_cart {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Access Forbidden",
-		})
+		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
 	databases.DeleteCart(conv_id)
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-	})
+	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
 func UpdateCartControllers(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "False Param",
-		})
+		return c.JSON(http.StatusBadRequest, response.FalseParamResponse())
 	}
 
 	cart := models.Cart{}
@@ -103,15 +77,9 @@ func UpdateCartControllers(c echo.Context) error {
 	logged := middlewares.ExtractTokenId(c)
 	// log.Println("idlogged", logged)
 	if id_user_cart == 0 {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
+		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	} else if uint(logged) != id_user_cart {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Access Forbidden",
-		})
+		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
 	}
 
 	//mengupdate total harga
@@ -121,8 +89,5 @@ func UpdateCartControllers(c echo.Context) error {
 	//untuk mengupdate
 	databases.UpdateCart(id, &cart)
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Successful Operation",
-	})
+	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
