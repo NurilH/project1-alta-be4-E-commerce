@@ -22,26 +22,27 @@ type OrderDetailRequest struct {
 	Order        ResponseOrder
 }
 
-func CreateOrder(Address *models.OrderRequest) (interface{}, error) {
-	if err := config.DB.Create(&Address.Address).Error; err != nil {
+func CreateOrder(Order_a *models.OrderRequest) (interface{}, error) {
+	config.DB.Create(&Order_a.Order)
+	if err := config.DB.Create(&Order_a.Address).Error; err != nil {
 		return nil, err
 	}
-	return OrderDetailRequest{Address.DetailCartId,
+	return OrderDetailRequest{Order_a.DetailCartId,
 		AddressRequest{
-			Address.Address.Street,
-			Address.Address.City,
-			Address.Address.State,
-			Address.Address.Zip,
+			Order_a.Address.Street,
+			Order_a.Address.City,
+			Order_a.Address.State,
+			Order_a.Address.Zip,
 		},
 		ResponseOrder{
-			Address.Order.TotalQty,
-			Address.Order.CreditID,
-			Address.Order.StatusOrder,
+			Order_a.Order.TotalQty,
+			Order_a.Order.CreditID,
+			Order_a.Order.StatusOrder,
 		},
 	}, nil
 }
 
-func CreateOrderDet(Order *models.Order) (interface{}, error) {
+func CreateOrderDet(Order *models.DaftarOrder) (interface{}, error) {
 	if err := config.DB.Create(&Order).Error; err != nil {
 		return nil, err
 	}

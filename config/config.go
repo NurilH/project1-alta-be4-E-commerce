@@ -30,6 +30,7 @@ func InitMigrate() {
 	DB.AutoMigrate(&models.Credit{})
 	DB.AutoMigrate(&models.Order{})
 	DB.AutoMigrate(&models.AddressRequest{})
+	DB.AutoMigrate(&models.DaftarOrder{})
 }
 
 // ===============================================================//

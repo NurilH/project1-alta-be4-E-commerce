@@ -15,17 +15,16 @@ func CreateOrderControllers(c echo.Context) error {
 
 	// var d interface{}
 	// var er error
+	order_detail, er := databases.CreateOrder(&order_req)
+
 	for _, v := range order_req.DetailCartId {
 		log.Println("id detail detail", v)
-		order := models.Order{}
-		order.DetailId = v
-		order.TotalQty = order_req.Order.TotalQty
-		order.CreditID = order_req.Order.CreditID
-		order.StatusOrder = order_req.Order.StatusOrder
+		order := models.DaftarOrder{}
+		order.DetailCartId = v
+		order.AddressRequestID = order_req.Address.ID
+		order.OrderID = order_req.Order.ID
 		databases.CreateOrderDet(&order)
 	}
-
-	order_detail, er := databases.CreateOrder(&order_req)
 	if er != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,

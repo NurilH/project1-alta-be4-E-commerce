@@ -7,7 +7,14 @@ type Order struct {
 	StatusOrder bool `json:"status_order" form:"status_order"`
 	TotalQty    int  `json:"total_qty" form:"total_qty"`
 	CreditID    uint `json:"credit_id" form:"credit_id"`
-	DetailId    int
+	DetailID    uint
+}
+
+type DaftarOrder struct {
+	gorm.Model
+	OrderID          uint
+	AddressRequestID uint
+	DetailCartId     int
 }
 
 type AddressRequest struct {
