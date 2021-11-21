@@ -3,6 +3,7 @@ module project_altabe4_1
 go 1.16
 
 require (
+	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/stretchr/testify v1.7.0

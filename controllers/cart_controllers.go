@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"project_altabe4_1/lib/databases"
 	"project_altabe4_1/middlewares"
@@ -9,6 +8,7 @@ import (
 	"project_altabe4_1/response"
 	"strconv"
 
+	validator "github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,20 +17,22 @@ func CreateCartControllers(c echo.Context) error {
 
 	Cart := models.Cart{}
 	c.Bind(&Cart)
-	log.Println(Cart.ProductID)
+	v := validator.New()
+	e := v.Var(Cart.Qty, "required,gt=0")
+	if e == nil {
+		logged := middlewares.ExtractTokenId(c)
 
-	logged := middlewares.ExtractTokenId(c)
+		id_user_cart, _ := databases.GetIDUserProduct(int(Cart.ProductID))
+		harga_product, _ := databases.GetHargaProduct(int(Cart.ProductID))
 
-	id_user_cart, _ := databases.GetIDUserProduct(int(Cart.ProductID))
-	harga_product, _ := databases.GetHargaProduct(int(Cart.ProductID))
+		Cart.UsersID = uint(logged)
+		Cart.TotalHarga = Cart.Qty * harga_product
 
-	Cart.UsersID = uint(logged)
-	Cart.TotalHarga = Cart.Qty * harga_product
-
-	if uint(logged) == id_user_cart {
-		return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
+		if uint(logged) == id_user_cart {
+			return c.JSON(http.StatusBadRequest, response.AccessForbiddenResponse())
+		}
+		_, e = databases.CreateCart(&Cart)
 	}
-	_, e := databases.CreateCart(&Cart)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
@@ -71,7 +73,11 @@ func UpdateCartControllers(c echo.Context) error {
 
 	cart := models.Cart{}
 	c.Bind(&cart)
-
+	v := validator.New()
+	e := v.Var(cart.Qty, "required,gt=0")
+	if e == nil {
+		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
+	}
 	// mengecek user id nya sama dan ada pada tabel
 	id_user_cart, id_product, _ := databases.GetIDUserCart(id)
 	logged := middlewares.ExtractTokenId(c)

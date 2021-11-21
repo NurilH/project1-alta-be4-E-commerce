@@ -10,8 +10,16 @@ import (
 	"project_altabe4_1/response"
 	"strconv"
 
+	validator "github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
+
+// struktur data untuk validasi user
+type ValidatorUser struct {
+	Nama     string `validate:"required"`
+	Email    string `validate:"required,email"`
+	Password string `validate:"required"`
+}
 
 // controller untuk menampilkan data user by id
 func GetUserControllers(c echo.Context) error {
@@ -32,9 +40,19 @@ func GetUserControllers(c echo.Context) error {
 func CreateUserControllers(c echo.Context) error {
 	new_user := models.Users{}
 	c.Bind(&new_user)
-	new_user.Password, _ = helper.HashPassword(new_user.Password) // generate plan password menjadi hash
-	_, e := databases.CreateUser(&new_user)
-	if e != nil {
+
+	v := validator.New()
+	validasi_user := ValidatorUser{
+		Nama:     new_user.Nama,
+		Email:    new_user.Email,
+		Password: new_user.Password,
+	}
+	err := v.Struct(validasi_user)
+	if err == nil {
+		new_user.Password, _ = helper.HashPassword(new_user.Password) // generate plan password menjadi hash
+		_, err = databases.CreateUser(&new_user)
+	}
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
 	return c.JSON(http.StatusOK, response.SuccessResponseData(new_user))
@@ -75,8 +93,18 @@ func UpdateUserControllers(c echo.Context) error {
 	}
 	users := models.Users{}
 	c.Bind(&users)
-	users.Password, _ = helper.HashPassword(users.Password) // generate plan password menjadi hash
-	_, e := databases.UpdateUser(id, &users)
+
+	v := validator.New()
+	validasi_user := ValidatorUser{
+		Nama:     users.Nama,
+		Email:    users.Email,
+		Password: users.Password,
+	}
+	e := v.Struct(validasi_user)
+	if e == nil {
+		users.Password, _ = helper.HashPassword(users.Password) // generate plan password menjadi hash
+		_, e = databases.UpdateUser(id, &users)
+	}
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
