@@ -14,11 +14,19 @@ func CreateProduct(product *models.Product) (interface{}, error) {
 
 func GetAllProduct() (interface{}, error) {
 	products := []models.Product{}
-	err := config.DB.Select([]string{"id", "nama", "harga", "kategori", "deskripsi"}).Find(&products)
+	type get_products struct {
+		ID        uint
+		Nama      string
+		Harga     int
+		Kategori  string
+		Deskripsi string
+	}
+	res := []get_products{}
+	err := config.DB.Model(&products).Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return products, nil
+	return res, nil
 }
 
 func GetProductById(id int) (interface{}, error) {
@@ -30,12 +38,13 @@ func GetProductById(id int) (interface{}, error) {
 		Kategori  string
 		Deskripsi string
 	}
-	err := config.DB.Find(&product, id)
+	res := get_product{}
+	err := config.DB.Model(&product).Find(&res, id)
 	rows_affected := config.DB.Find(&product, id).RowsAffected
 	if err.Error != nil || rows_affected < 1 {
 		return nil, err.Error
 	}
-	return get_product{product.ID, product.Nama, product.Harga, product.Kategori, product.Deskripsi}, nil
+	return res, nil
 }
 
 func GetIDUserProduct(id int) (uint, error) {

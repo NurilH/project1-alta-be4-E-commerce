@@ -16,12 +16,13 @@ func GetUser(id int) (interface{}, error) {
 		Nama  string
 		Email string
 	}
-	err := config.DB.Find(&users, id)
+	res := get_user{}
+	err := config.DB.Model(users).Find(&res, id)
 	rows_affected := config.DB.Find(&users, id).RowsAffected
 	if err.Error != nil || rows_affected < 1 {
 		return nil, err.Error
 	}
-	return get_user{users.Nama, users.Email}, nil
+	return res, nil
 }
 
 func CreateUser(user *models.Users) (interface{}, error) {

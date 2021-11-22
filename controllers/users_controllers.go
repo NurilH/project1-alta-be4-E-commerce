@@ -35,7 +35,7 @@ func CreateUserControllers(c echo.Context) error {
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, response.BadRequestResponse())
 	}
-	return c.JSON(http.StatusOK, response.SuccessResponseData(new_user))
+	return c.JSON(http.StatusOK, response.SuccessResponseNonData())
 }
 
 func DeleteUserControllers(c echo.Context) error {
