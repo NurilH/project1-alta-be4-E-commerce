@@ -1,0 +1,25 @@
+name: Deploy to EC2
+on: 
+  push:
+    branches:
+      - main
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to EC2 using SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /home/ubuntu/app
+          git pull origin main
+          docker stop Project1AltaBe4
+          docker rm Project1AltaBe4
+          docker build -t alta-be4-app:latest .
+          docker run -d -e "CONNECTION_DB=admin:nuril123@tcp(db-project1.cxhaug23hp7t.ap-southeast-1.rds.amazonaws.com:3306)/db_project_1?charset=utf8&parseTime=True&loc=Local" -p 80:8080 --name Project1AltaBe4 alta-be4-app:latest
