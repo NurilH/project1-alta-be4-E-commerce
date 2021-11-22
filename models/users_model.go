@@ -11,3 +11,8 @@ type Users struct {
 	Product  []Product
 	Cart     []Cart
 }
+
+type Get_User struct {
+	Nama  string
+	Email string
+}

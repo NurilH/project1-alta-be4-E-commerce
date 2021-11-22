@@ -12,11 +12,7 @@ var user models.Users
 
 func GetUser(id int) (interface{}, error) {
 	users := models.Users{}
-	type get_user struct {
-		Nama  string
-		Email string
-	}
-	res := get_user{}
+	res := models.Get_User{}
 	err := config.DB.Model(users).Find(&res, id)
 	rows_affected := config.DB.Find(&users, id).RowsAffected
 	if err.Error != nil || rows_affected < 1 {

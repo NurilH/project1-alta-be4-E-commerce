@@ -11,3 +11,11 @@ type Product struct {
 	UsersID   uint
 	Cart      []Cart
 }
+
+type Get_Products struct {
+	ID        uint
+	Nama      string
+	Harga     int
+	Kategori  string
+	Deskripsi string
+}
