@@ -8,18 +8,7 @@ import (
 )
 
 func GetAllCart(id_user_token int) (interface{}, error) {
-	type result struct {
-		ID         uint   `json:"id"`
-		Qty        int    `json:"qty"`
-		TotalHarga int    `json:"total_harga"`
-		UsersID    uint   `json:"users_id"`
-		ProductID  uint   `json:"product_id"`
-		Nama       string `json:"nama"`
-		Harga      int    `json:"harga"`
-		Kategori   string `json:"kategori"`
-		Deskripsi  string `json:"deskripsi"`
-	}
-	cart := []result{}
+	cart := []models.Result{}
 	where_clause := fmt.Sprintf("carts.users_id = %v", id_user_token)
 	query := config.DB.Table("carts").Select("carts.id, carts.qty, carts.total_harga, carts.users_id, carts.product_id, products.nama, products.harga, products.kategori, products.deskripsi").Joins("join products on carts.product_id = products.id").Where(where_clause).Find(&cart)
 
