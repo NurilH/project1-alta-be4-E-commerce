@@ -16,10 +16,23 @@ func CreateOrderControllers(c echo.Context) error {
 
 	// var d interface{}
 	var qt, hg int
-	for _, v := range order_req.DetailCartId {
+	for x, v := range order_req.DetailCartId {
+		for i := x; i < len(order_req.DetailCartId); i++ {
+
+			log.Println("id detail detail", x)
+			id_user_cart, _, _ := databases.GetIDUserCart(v)
+
+			if id_user_cart == 0 {
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "Bad Request",
+				})
+			}
+		}
 		h, q, _ := databases.GetHargaQtyCart(v)
 		qt += q
 		hg += h
+
 	}
 	log.Println("total qty", qt, " total harga:", hg)
 
@@ -35,11 +48,11 @@ func CreateOrderControllers(c echo.Context) error {
 	order_detail, er := databases.CreateOrder(&order_req)
 
 	for _, v := range order_req.DetailCartId {
-		log.Println("id detail detail", v)
 		order := models.DaftarOrder{}
 		order.CartID = uint(v)
 		order.OrderID = order_req.Order.ID
 		databases.CreateOrderDet(&order)
+		databases.DeleteCart(v)
 	}
 	if er != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{

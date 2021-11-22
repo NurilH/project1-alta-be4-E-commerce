@@ -10,6 +10,7 @@ type Order struct {
 	CreditID       uint `json:"credit_id" form:"credit_id"`
 	AddressRequest uint
 	UsersID        uint
+	DaftarOrder    []DaftarOrder
 }
 
 type DaftarOrder struct {
