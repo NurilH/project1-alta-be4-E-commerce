@@ -11,4 +11,5 @@ type Credit struct {
 	Bulan   int    `json:"bulan" form:"bulan"`
 	Tahun   int    `json:"tahun" form:"tahun"`
 	UsersID uint
+	Order   []Order
 }

@@ -46,6 +46,12 @@ func CreateOrderControllers(c echo.Context) error {
 
 	order_req.Order.AddressRequest = order_req.Address.ID
 	order_detail, er := databases.CreateOrder(&order_req)
+	if er != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"code":    http.StatusBadRequest,
+			"message": "Bad Request",
+		})
+	}
 
 	for _, v := range order_req.DetailCartId {
 		order := models.DaftarOrder{}
@@ -53,12 +59,6 @@ func CreateOrderControllers(c echo.Context) error {
 		order.OrderID = order_req.Order.ID
 		databases.CreateOrderDet(&order)
 		databases.DeleteCart(v)
-	}
-	if er != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "Bad Request",
-		})
 	}
 
 	log.Println("isi cart :", order_req.DetailCartId)
