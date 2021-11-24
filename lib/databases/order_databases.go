@@ -82,9 +82,9 @@ func GetOrder(id int) (interface{}, interface{}, error) {
 
 	order_a := models.Order{}
 
-	config.DB.Where(" users_id <> ?", id).Find(&order_a)
+	config.DB.Where("credit_id = ?", 3).Find(&order_a)
 	log.Println("id dari order", id)
-	config.DB.Find(&order)
+	config.DB.Where("order_id <> ?", order_a.ID).Find(&order)
 	// cart_order := CartOrder{}
 
 	// query := config.DB.Table("daftar_orders").Select("products.id, products.nama, carts.qty, carts.total_harga").Joins("join carts on daftar_orders.detail_cart_id = carts.id ").Joins("join products on carts.product_id = products.id").Where("daftar_orders.order_id=2").Find(&cart_order)

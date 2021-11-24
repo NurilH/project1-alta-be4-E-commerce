@@ -75,7 +75,7 @@ func CreateOrderControllers(c echo.Context) error {
 func GetOrderControllers(c echo.Context) error {
 	// order_req := models.DaftarOrder{}
 	logged := middlewares.ExtractTokenId(c)
-	_, s, err := databases.GetOrder(logged)
+	o, s, err := databases.GetOrder(logged)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"code":    http.StatusBadRequest,
@@ -87,5 +87,6 @@ func GetOrderControllers(c echo.Context) error {
 		"code":    http.StatusOK,
 		"message": "Successful Operation",
 		"address": s,
+		"data":    o,
 	})
 }
