@@ -11,7 +11,7 @@ import (
 func New() *echo.Echo {
 
 	e := echo.New()
-	// users
+	// users tanpa jwt
 	e.POST("/users", controllers.CreateUserControllers)
 	e.POST("/login", controllers.LoginUserControllers)
 	e.GET("/users/:id", controllers.GetUserControllers)
