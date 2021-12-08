@@ -12,7 +12,7 @@ func main() {
 	config.InitDB()
 	e := routes.New()
 	middlewares.LogMiddlewares(e)
-	if err := e.StartTLS(":8443", "server.crt", "server.key"); err != http.ErrServerClosed {
+	if err := e.StartTLS(":443", "server.crt", "server.key"); err != http.ErrServerClosed {
 		log.Fatal(err)
 	}
 }
